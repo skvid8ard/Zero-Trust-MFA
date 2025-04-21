@@ -26,7 +26,7 @@ from bcrypt import gensalt, hashpw, checkpw
 active_sessions = {}
 
 def hash_password(password: str) -> str:
-    return password  # Теперь пароль уже хеширован агентом
+    return password
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return bcrypt.checkpw(
@@ -94,7 +94,7 @@ def register():
     end_time = data.get('end_time')
 
     logger.debug(f"[REGISTER] Начало регистрации пользователя: {username}")
-    logger.debug(f"[REGISTER] Получен пароль: {password}")  # Не логируем сам пароль!
+    logger.debug(f"[REGISTER] Получен пароль: {password}")
 
     ip = get_client_ip()
     geolocation = get_geolocation(ip)
@@ -154,7 +154,7 @@ def verify_signature_route():
     if not user:
         return jsonify({"error": "User not found"}), 404
 
-    # Генерация временного хеша для отладки (не сохраняется!)
+    # Генерация временного хеша для отладки
     temp_hash = bcrypt.hashpw(password.encode(), user[3].encode()).decode()
     
     logger.debug("[AUTH] Проверка пароля:")
@@ -323,5 +323,5 @@ def update_location():
 if __name__ == '__main__':
     app.run(
         debug=True,
-        ssl_context=('server.crt', 'server.key')  # SSL-сертификаты
+        ssl_context=('server.crt', 'server.key')
     )
